@@ -4,8 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Mvc;
+
 
 namespace MyCourse1
 {
@@ -15,7 +18,7 @@ namespace MyCourse1
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -25,15 +28,13 @@ namespace MyCourse1
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseStaticFiles();
 
             //app.UseMVCWithDefaultRoute();
             app.UseMvc(routeBuilder =>
             {
-                routeBuilder.MapRoute("default", "{controller=Home} / {action=index} / {id?}");
+                routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
-
-            app.UseStaticFiles();
-    
         }
     }
 }
