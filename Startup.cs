@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
 
 
 namespace MyCourse1
@@ -22,11 +23,18 @@ namespace MyCourse1
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime lifetime)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                //aggiorniamo un file per notificare al browser sync che deve aggiornare la pagina
+                lifetime.ApplicationStarted.Register(()=>
+                {
+                    string filePath = Path.Combine(env.ContentRootPath, "bin/reload.txt");
+                    File.WriteAllText(filePath, DateTime.Now.ToString());
+
+                });
             }
             app.UseStaticFiles();
 
